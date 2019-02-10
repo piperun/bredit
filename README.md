@@ -1,4 +1,4 @@
 # bredit
 
 
-Bredit stands for: *B*encode *R*eplacer and *EDIT*or 
+Bredit stands for: _B_encode _R_eplacer and _EDIT_or 
