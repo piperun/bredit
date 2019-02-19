@@ -1,66 +1,118 @@
 package main
 
 
+
+/*
+TODO
+* Implement some Check functions (for now i'll make the check functions toothless)
+* Overwrite/Save-to-File function
+* Re-Implement the relation between args and folderData, make it so that folderData parses either the entire directory or paths provided by os.args
+* Some other non-sense 
+
+*/
+
+
+
 import (
-        "fmt"
-        "flag"
+	"flag"
 )
 
-type bencodeData struct {
-        benmap map[string]interface{}
-        table []string
-}
-
-type optFlags struct {
-        guiFlag *bool
-        keyFlag *string
-        valFlag *string
-        args    []string
+type options struct {
+	cliFlag *bool
+	keyFlag *string
+	valFlag *string
+	patFlag *string
+	args	[]string
 }
 
 func check(e error) {
-        if e != nil {
-                panic(e)
-        }
+	if e != nil {
+		panic(e)
+	}
 }
 
 
-func (o *optFlags) construct() {
-        o.guiFlag = flag.Bool("g", false, "[BOOL] Run bredit in GUI mode")
-        o.keyFlag = flag.String("k", "", "[STR] bencode key")
-        o.valFlag = flag.String("val", "", "[STR] value to replace key's value")
-        o.args = flag.Args()
+func (o *options) construct() {
+	o.cliFlag = flag.Bool("c", true, "Run bredit in CLI mode")
+	o.keyFlag = flag.String("k", "", "Bencode key")
+	o.valFlag = flag.String("v", "", "Expression to replace key's value")
+	o.patFlag = flag.String("p", "", "Pattern used to replace key's value")
 
-
+	flag.Parse()
+	o.args = flag.Args()
 }
 
-func (o *optFlags) checkFlags() {
-        if *o.guiFlag != false {
-                // Start Qt
-        } else {
-                if *o.keyFlag == "" || *o.valFlag == "" {
-                        err := "key & val flag not set, quitting"
-                        panic(err)
-                }
-        }
+// Re-write this with proper function & switch case
+/*
+proposal:
+// this can be a lambda 
+func check_all_flags -> {
+	if empty -> return num
+	if not empty -> return num+1
+	etc.
 }
 
-func (o *optFlags) checkArgs() {
-        if *o.guiFlag == false {
-                if o.args[0] == "" {
-                        err := "no directory or file provided in CLI mode"
-                        panic(err)
-                }
-        }
+switch func
+case num
+print err
+kill
+case num+1
+print err+1
+kill
+*/
+func (o *options) check() {
+	if *o.cliFlag {
+		if *o.keyFlag == "" || *o.valFlag == "" && *o.patFlag == "" {
+			err := "key & val or pat flag not set, quitting"
+			panic(err)
+		}
+		if o.args[0] == "" {
+			err := "no directory or file provided in CLI mode"
+			panic(err)
+		}
+	}
+}
+
+func (o *options) checkValidKey(data bencodeData) {
+	if *o.cliFlag {
+		if err, ok := data.benmap[*o.keyFlag]; !ok {
+			err = "The key provided does not exist!"
+			panic(err)
+		}
+	}
 }
 
 func main() {
-        var (
-                opt optFlags
-        )
+	var (
+		opt options
+		data bencodeData
+		generic genericData
+		folder folderData
+	)
+	ext := make(map[string]string)
+	ext["rtorrent"] = ".rtorrent"
 
-        opt.construct()
+	opt.construct()
+	opt.check()
+	if *opt.cliFlag {
+		generic.construct(*opt.valFlag, *opt.patFlag, *opt.keyFlag, opt.args[0])
+	} else {
+		// for GUI
+	}
 
-        flag.Parse()
-        opt.checkFlags()
+	pathType, err := CheckPathType(generic.path)
+	check(err)
+
+	switch pathType {
+	case 1:
+		folder.ParseFolder(generic.path, ext)
+		arrData := make([]bencodeData, len(folder))
+		arrData = DecodeSync(folder)
+		EditDataSync(arrData, generic)
+
+	case 2:
+		data.DecodeFile(generic.path)
+		data.SortBenmap()
+	}
+
 }
