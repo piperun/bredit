@@ -25,7 +25,7 @@ Make sure to install [zeebo's encode library](https://github.com/zeebo/bencode):
 
 `go get github.com/zeebo/bencode`
 
-If you're going to compiling statically, make sure to install libgo-static and glibc-static is installed (name may vary)
+If you're going to compiling statically, make sure `libgo-static` and `glibc-static` is installed (name may vary)
 
 To compile it yourself you'll need to make sure that at least `$GOOS` and `$GOARCH` is set:
 - `$GOOS`
