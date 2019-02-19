@@ -5,7 +5,6 @@ package main
 /*
 TODO
 * Implement some Check functions (for now i'll make the check functions toothless)
-* Overwrite/Save-to-File function
 * Re-Implement the relation between args and folderData, make it so that folderData parses either the entire directory or paths provided by os.args
 * Some other non-sense 
 
