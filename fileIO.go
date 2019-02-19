@@ -10,10 +10,6 @@ type folderData []string
 type fileExtensions map[string]string
 
 
-func (fd *folderData) SaveData(data bencodeData) {
-
-}
-
 func CheckPathType(path string) (int, error) {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -40,8 +36,6 @@ func CheckSuffix(path string) bool {
 */
 
 func (fd *folderData) ParseFolder(location string, extensions fileExtensions) error{
-	tmp := ""
-
 	if !strings.HasSuffix(location, "/") {
 		location = location + "/"
 	}
@@ -59,8 +53,7 @@ func (fd *folderData) ParseFolder(location string, extensions fileExtensions) er
 	for _, file := range fileInfo {
 		for _, ext := range extensions {
 			if filepath.Ext(file.Name()) == ext {
-				tmp = location + file.Name()
-				*fd = append(*fd, tmp)
+				*fd = append(*fd, location + file.Name())
 			}
 
 		}

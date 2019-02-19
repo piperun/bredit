@@ -13,6 +13,7 @@ TODO
 
 import (
 	"flag"
+	"fmt"
 )
 
 type options struct {
@@ -20,6 +21,7 @@ type options struct {
 	keyFlag *string
 	valFlag *string
 	patFlag *string
+	dryFlag *bool
 	args	[]string
 }
 
@@ -35,6 +37,7 @@ func (o *options) construct() {
 	o.keyFlag = flag.String("k", "", "Bencode key")
 	o.valFlag = flag.String("v", "", "Expression to replace key's value")
 	o.patFlag = flag.String("p", "", "Pattern used to replace key's value")
+	o.dryFlag = flag.Bool("d", false, "Doesn't overwrite files")
 
 	flag.Parse()
 	o.args = flag.Args()
@@ -107,10 +110,21 @@ func main() {
 		arrData := make([]bencodeData, len(folder))
 		arrData = DecodeSync(folder)
 		EditDataSync(arrData, generic)
+		if !*opt.dryFlag {
+			EncodeSync(arrData, folder)
+		}
 
 	case 2:
 		data.DecodeFile(generic.path)
 		data.SortBenmap()
+		data.EditData(generic)
+		if !*opt.dryFlag {
+			data.EncodeFile(generic.path)
+		} else {
+			fmt.Printf("Changed key:\n%s\nvalue to:\n%s\nin file:\n%s\n", generic.key, data.benmap[generic.key], generic.path)
+		}
+
+
 	}
 
 }

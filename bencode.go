@@ -33,34 +33,31 @@ func (gd *genericData) construct(v string, p string, k string, d string) {
 }
 
 /*
-TODO
+NOTE:
 For now we let the goroutine spawn as many gophers it want, but it might be needed to limit them to the OS rlimit size
 */
 
-func EditDataSync(data []bencodeData, gd genericData) {
+func EncodeSync(data []bencodeData, fd folderData) {
 
-	var (
-		wg sync.WaitGroup
-	)
+	var wg sync.WaitGroup
+	wg.Add(len(fd))
 
-	wg.Add(len(data))
-
-	for i := 0; i < len(data); i += 1 {
+	for i := 0; i < len(fd); i += 1 {
 		go func(i int) {
 			defer wg.Done()
-			data[i].EditData(gd)
+			data[i].EncodeFile(fd[i])
 		}(i)
 	}
-	wg.Wait()
 
 }
 
-
 func DecodeSync(fd folderData) []bencodeData{
+
 	var (
 		wg sync.WaitGroup
+		rlimit syscall.Rlimit
 	)
-	var rlimit syscall.Rlimit
+
 	syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit)
 
 	arrData := make([]bencodeData, len(fd))
@@ -77,10 +74,27 @@ func DecodeSync(fd folderData) []bencodeData{
 	return arrData
 }
 
+func EditDataSync(data []bencodeData, gd genericData) {
+
+	var wg sync.WaitGroup
+	wg.Add(len(data))
+
+	for i := 0; i < len(data); i += 1 {
+		go func(i int) {
+			defer wg.Done()
+			data[i].EditData(gd)
+		}(i)
+	}
+	wg.Wait()
+
+}
 
 
 
-// TODO #3
+
+
+
+
 func (data *bencodeData) EncodeFile(filename string) {
 	file, err := os.OpenFile(filename, os.O_WRONLY, 0664)
 	check(err)
@@ -92,18 +106,15 @@ func (data *bencodeData) EncodeFile(filename string) {
 	}
 }
 
-// TODO #3
 func (data *bencodeData) DecodeFile(filename string) {
 	file, err := os.Open(filename)
 	check(err)
 	defer file.Close()
 
 	decode := bencode.NewDecoder(file)
-	var tmp map[string]interface{}
-	if err := decode.Decode(&tmp); err != nil {
+	if err := decode.Decode(&data.benmap); err != nil {
 		panic(err)
 	}
-	data.benmap = tmp
 }
 
 func (data *bencodeData) EditData(gd genericData) {
