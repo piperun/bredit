@@ -3,7 +3,7 @@
 # bredit
 
 
-bredit stands for: **B**encode **R**eplacer and **EDIT**or  - which is written in the Golang language.
+bredit stands for: **B**encode **R**eplacer and **EDIT**or  - which is written in the Go language.
 
 It's released under GPLv2 license and therefor is free software.
 
