@@ -16,10 +16,13 @@ Currently bredit only supports CLI but is planned to support editing via GUI.
 # Installation
 
 ## From Binary
-There is no installation required since the software is compiled as static.
+There is no installation required since the software is compiled with static.
 
 ## Compile source
 ⚠Some if not all of this might change in the future with a simple Makefile.⚠
+
+Make sure to install [zeebo's encode library](https://github.com/zeebo/bencode):
+`go get github.com/zeebo/bencode`
 
 If you're going to compiling statically, make sure to install libgo-static and glibc-static is installed (name may vary)
 
