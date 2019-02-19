@@ -34,10 +34,10 @@ func check(e error) {
 
 func (o *options) construct() {
 	o.cliFlag = flag.Bool("c", true, "Run bredit in CLI mode")
+	o.dryFlag = flag.Bool("d", false, "Doesn't overwrite files")
 	o.keyFlag = flag.String("k", "", "Bencode key")
 	o.valFlag = flag.String("v", "", "Expression to replace key's value")
 	o.patFlag = flag.String("p", "", "Pattern used to replace key's value")
-	o.dryFlag = flag.Bool("d", false, "Doesn't overwrite files")
 
 	flag.Parse()
 	o.args = flag.Args()
