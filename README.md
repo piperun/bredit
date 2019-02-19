@@ -22,6 +22,7 @@ There is no installation required since the software is compiled with static.
 ⚠Some if not all of this might change in the future with a simple Makefile.⚠
 
 Make sure to install [zeebo's encode library](https://github.com/zeebo/bencode):
+
 `go get github.com/zeebo/bencode`
 
 If you're going to compiling statically, make sure to install libgo-static and glibc-static is installed (name may vary)
