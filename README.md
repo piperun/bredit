@@ -13,24 +13,8 @@ Currently bredit only supports CLI but is planned to support editing via GUI.
 
 
 # Usage
-in CLI mode you need to give bredit at least 2 flags and 1 arg:
-    
+Please refer to the [Wiki](https://github.com/piperun/bredit/wiki/)
 
- - -k --- takes a string that represents a __key__ in the bencode dictionary
- - -v --- takes a string that represents the value used to replace the **key**'s value
- - -p --- takes a string that represents a pattern used to identify the **key**'s value
- - args[0] --- takes a string that represents a full path to either a file or folder
-
-#### Example:
-
-- Single file:
- 
-
-       bredit -k="encoding" -val="UTF-8" /home/user/.session/Alice\ in\ Wonderland.torrent
-- Folder:
- 
-
-       bredit -k="encoding" -val="SHIFT-JIS" /home/user/.session/
       
 ---
 There are some limitations currently when using bredit in CLI mode.
