@@ -12,6 +12,10 @@ It's designed to edit files in bulk but you can manually edit a file if needed.
 
 Currently bredit only supports CLI but is planned to support editing via GUI.
 
+Features not yet Added:
+* GUI
+* "Repair feature" (Essentially allowing the user to add custom path to empty fields within encode files)
+
 
 # Installation
 
